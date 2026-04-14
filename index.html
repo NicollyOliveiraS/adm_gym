@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Academia</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body class="admin-body">
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-mask"></i>
+                <span>ADMIN ACADEMIA</span>
+            </div>
+            <div id="userInfo" class="user-info hidden">
+                <span id="userEmail"></span>
+                <button id="btnLogout" class="btn-exit">SAIR</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-container">
+        <section id="loginSection" class="catraca login-box">
+            <p>ACESSO RESTRITO</p>
+            <h2>Identifique-se para continuar</h2>
+            <form id="loginForm" class="admin-form">
+                <div class="display-cpf">
+                    <input type="text" id="usuario" placeholder="USUÁRIO" required>
+                </div>
+                <div class="display-cpf">
+                    <input type="password" id="password" placeholder="SENHA" required>
+                </div>
+                <button type="submit" class="btn-ok">ENTRAR</button>
+                <div id="loginError" class="error-msg hidden">ACESSO NEGADO</div>
+            </form>
+        </section>
+
+        <div id="adminSection" class="admin-content hidden">
+            <div class="stats-row">
+                <div class="catraca stat-card">
+                    <p>TOTAL CADASTROS</p>
+                    <div class="display-cpf" id="totalCadastros">0</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <aside class="form-side">
+                    <div class="catraca">
+                        <p id="formTitle">NOVO CADASTRO</p>
+                        <form id="cadastroForm" class="admin-form">
+                            <input type="hidden" id="cadastroId">
+                            <div class="form-group">
+                                <label>NOME COMPLETO</label>
+                                <textarea id="nome" rows="2" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>CPF</label>
+                                <input type="text" id="cpf" required>
+                            </div>
+                            <div class="btn-group">
+                                <button type="submit" class="btn-ok">SALVAR</button>
+                                <button type="button" id="btnCancelar" class="btn-cancel hidden">CANCELAR</button>
+                            </div>
+                        </form>
+                    </div>
+                </aside>
+
+                <section class="list-side">
+                    <div class="catraca table-container">
+                        <div class="table-header">
+                            <p>GERENCIAR</p>
+                            <button onclick="carregarCadastros()" class="btn-refresh">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>NOME</th>
+                                    <th>CPF</th>
+                                    <th>AÇÕES</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaCadastros">
+                                </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+</html>
