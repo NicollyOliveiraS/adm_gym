@@ -38,14 +38,24 @@ function iniciarApp() {
 }
 
 // 2. LÓGICA DO OLHO (MOSTRAR/ESCONDER SENHA)
+// Lógica corrigida do Olho (Mostrar/Esconder Senha)
+
+
 if (togglePassword) {
     togglePassword.addEventListener('click', function () {
+        // Inverte o tipo do input
         const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordField.setAttribute('type', type);
         
-        // Alterna o ícone do Font Awesome
-        eyeIcon.classList.toggle('fa-eye');
-        eyeIcon.classList.toggle('fa-eye-slash');
+        // Ajusta o ícone corretamente
+        if (type === 'password') {
+             eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash'); // Ícone de "Cortado" quando está visível
+        } else {
+           
+             eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        }
     });
 }
 
@@ -237,6 +247,15 @@ document.getElementById('cpf').addEventListener('input', function (e) {
     this.value = value;
 });
 btnCancelar.addEventListener('click', limparFormulario);
+// Adicione isto ao final do seu admin.js
+const inputNome = document.getElementById('nome');
+
+if (inputNome) {
+    inputNome.addEventListener('input', function() {
+        // Remove qualquer caractere que NÃO seja letra ou espaço
+        this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+    });
+}
 
 // INICIAR
 iniciarApp();
