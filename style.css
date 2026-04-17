@@ -178,7 +178,14 @@ textarea {
   text-transform: uppercase;
   letter-spacing: 1px;
 }
-
+.admin-table th:first-child, 
+.admin-table td:first-child {
+    width: 100px; /* Ajuste conforme necessário */
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 /* --- BOTÕES --- */
 button {
   padding: 14px 24px;
@@ -276,7 +283,18 @@ button {
   color: var(--primary-color);
   text-shadow: 0 0 15px var(--primary-glow);
 }
+/* Cores dos Status */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
 
+.status-ativo { background: rgba(79, 139, 79, 0.2); color: #4f8b4f; border: 1px solid #4f8b4f; }
+.status-inativo { background: rgba(255, 68, 68, 0.2); color: #ff4444; border: 1px solid #ff4444; }
+.status-pendente { background: rgba(255, 187, 51, 0.2); color: #ffbb33; border: 1px solid #ffbb33; }
 /* --- UTILITÁRIOS --- */
 .hidden { display: none !important; }
 
