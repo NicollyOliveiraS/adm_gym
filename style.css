@@ -61,38 +61,77 @@ p {
   align-items: center;
   gap: 12px;
   color: var(--primary-color);
-  font-weight: 900;
+  font-weight: 800;
   letter-spacing: 1px;
   text-shadow: 0 0 10px var(--primary-glow);
 }
 
+
 /* --- CONTAINERS (CATRACA) --- */
-.catraca {
-  background: var(--card-bg);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-  border: 1px solid #222;
-  transition: var(--transition);
-}
-
-.catraca:hover {
-  border-color: #333;
-}
-
-/* --- DASHBOARD LAYOUT --- */
+/* Garante que o container principal alinhe os itens em coluna */
 .main-container {
   width: 100%;
   max-width: 1200px;
   padding: 40px 20px;
+  display: flex;
+  flex-direction: column; /* Faz os itens ficarem um abaixo do outro */
+  align-items: center;
+  gap: 30px; /* Cria um espaçamento consistente entre as seções */
+}
+
+/* Remove larguras fixas que podem quebrar o layout em telas menores */
+.catraca {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #222;
+  width: 100%; /* Muda de 600px fixo para 100% */
+  max-width: 800px; /* Define um limite máximo elegante */
+  position: relative; /* Garante que não use absolute por engano */
+}
+.display-cpf.password-container {
+    display: flex;             /* Ativa o alinhamento flexível */
+    align-items: center;       /* Centraliza verticalmente o input e o ícone */
+    justify-content: space-between; /* Empurra o ícone para a direita */
+    padding-right: 15px;       /* Dá um pequeno distanciamento da borda direita */
+}
+
+.password-container input {
+    flex: 1;                   /* Faz o input ocupar todo o espaço disponível à esquerda */
+    text-align: center;        /* Mantém o texto centralizado se desejar */
+    padding-left: 30px;        /* Compensa o espaço do ícone para manter o texto centralizado */
+}
+
+.toggle-icon {
+    cursor: pointer;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.toggle-icon:hover {
+    filter: brightness(1.2);
+    text-shadow: 0 0 8px var(--primary-glow);
+}
+
+/* Ajusta o Dashboard para não sobrepor */
+.admin-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 350px 1fr;
+  grid-template-columns: 1fr 1.5fr; /* Divide o formulário e a tabela lado a lado */
   gap: 30px;
-  margin-top: 30px;
+  width: 100%;
 }
+
+
 
 /* --- INPUTS & FORMS --- */
 .display-cpf {
@@ -102,6 +141,13 @@ p {
   border-radius: 6px;
   border: 1px solid #1a1a1a;
   transition: var(--transition);
+}
+/* Adicione ou altere no seu style.css */
+.display-cpf input {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none;
+    outline: none;
 }
 
 .display-cpf:focus-within {
@@ -113,6 +159,7 @@ input[type="text"],
 input[type="password"], 
 textarea {
   background: transparent;
+  background-color: transparent; /* Garante que não haja cor de fundo */
   border: none;
   color: var(--primary-color);
   width: 100%;
@@ -241,6 +288,14 @@ button {
   border: 1px solid rgba(255, 68, 68, 0.2);
   border-radius: 4px;
   background: rgba(255, 68, 68, 0.05);
+}
+/* Remove o fundo branco do preenchimento automático do navegador */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--input-bg) inset !important;
+    -webkit-text-fill-color: var(--primary-color) !important;
 }
 
 /* --- RESPONSIVIDADE --- */

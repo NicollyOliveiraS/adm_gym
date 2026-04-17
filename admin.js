@@ -205,5 +205,23 @@ function mostrarPainelAdmin() {
     adminSection.classList.remove('hidden');
     userInfo.classList.remove('hidden');
 }
+// Lógica para mostrar/esconder senha
+const togglePassword = document.querySelector('#togglePassword');
+const passwordField = document.querySelector('#password');
+const eyeIcon = document.querySelector('#eyeIcon');
+
+togglePassword.addEventListener('click', function () {
+    // Alterna entre o tipo password e text
+    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordField.setAttribute('type', type);
+    
+    // Alterna as classes do ícone (olho aberto / olho cortado)
+    if (type === 'text') {
+        eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+});
+
 
 iniciarApp();

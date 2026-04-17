@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Administrativo - Academia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    
 </head>
 <body class="admin-body">
 
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
-                <i class="fas fa-mask"></i>
                 <img src="img/gf.png" height="100">
             </div>
             <div id="userInfo" class="user-info hidden">
@@ -30,8 +29,11 @@
                 <div class="display-cpf">
                     <input type="text" id="usuario" placeholder="USUÁRIO" required>
                 </div>
-                <div class="display-cpf">
+                <div class="display-cpf password-container">
                     <input type="password" id="password" placeholder="SENHA" required>
+                    <span id="togglePassword" class="toggle-icon">
+                        <i class="fas fa-eye" id="eyeIcon"></i>
+                    </span>
                 </div>
                 <button type="submit" class="btn-ok">ENTRAR</button>
                 <div id="loginError" class="error-msg hidden">ACESSO NEGADO</div>
@@ -42,7 +44,7 @@
             <div class="stats-row">
                 <div class="catraca stat-card">
                     <p>TOTAL CADASTROS</p>
-                    <div class="display-cpf" id="totalCadastros">0</div>
+                    <div id="totalCadastros">0</div>
                 </div>
             </div>
 
@@ -84,8 +86,7 @@
                                     <th>AÇÕES</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabelaCadastros">
-                                </tbody>
+                            <tbody id="tabelaCadastros"></tbody>
                         </table>
                     </div>
                 </section>
