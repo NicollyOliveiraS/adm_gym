@@ -1,5 +1,5 @@
 /**
- * ARQUIVO: admin.js - Versão Final Integrada
+ * ARQUIVO: admin.js - Versão Final com Validações e Correções
  */
 
 const API_BASE_URL = 'https://academia-limpo.vercel.app'; 
@@ -17,6 +17,11 @@ const tabelaCadastros = document.getElementById('tabelaCadastros');
 const totalCadastrosEl = document.getElementById('totalCadastros');
 const btnCancelar = document.getElementById('btnCancelar');
 const formTitle = document.getElementById('formTitle');
+
+// Campos de Input
+const inputNome = document.getElementById('nome');
+const inputCpf = document.getElementById('cpf');
+const inputStatus = document.getElementById('status');
 
 // Referências para o Olho da Senha
 const togglePassword = document.querySelector('#togglePassword');
@@ -37,29 +42,40 @@ function iniciarApp() {
     }
 }
 
-// 2. LÓGICA DO OLHO (MOSTRAR/ESCONDER SENHA)
-// Lógica corrigida do Olho (Mostrar/Esconder Senha)
-
-
+// 2. LÓGICA DO OLHO (CORRIGIDA)
 if (togglePassword) {
     togglePassword.addEventListener('click', function () {
-        // Inverte o tipo do input
         const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordField.setAttribute('type', type);
         
-        // Ajusta o ícone corretamente
+        // Se a senha está oculta (password), mostra o olho normal para "ver"
+        // Se a senha está visível (text), mostra o olho cortado para "esconder"
         if (type === 'password') {
-             eyeIcon.classList.remove('fa-eye');
-            eyeIcon.classList.add('fa-eye-slash'); // Ícone de "Cortado" quando está visível
+            eyeIcon.className = 'fas fa-eye';
         } else {
-           
-             eyeIcon.classList.remove('fa-eye-slash');
-            eyeIcon.classList.add('fa-eye');
+            eyeIcon.className = 'fas fa-eye-slash';
         }
     });
 }
 
-// 3. AUTENTICAÇÃO (LOGIN)
+// 3. FILTROS DE INPUT (NOME E CPF)
+if (inputNome) {
+    inputNome.addEventListener('input', function() {
+        // Aceita apenas letras e espaços
+        let valor = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+        // Primeira letra de cada palavra em Maiúscula
+        this.value = valor.replace(/\b\w/g, l => l.toUpperCase());
+    });
+}
+
+if (inputCpf) {
+    inputCpf.addEventListener('input', function() {
+        // Aceita apenas números e limita a 11 dígitos
+        this.value = this.value.replace(/\D/g, "").slice(0, 11);
+    });
+}
+
+// 4. AUTENTICAÇÃO (LOGIN)
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault(); 
     const usuario = document.getElementById('usuario').value;
@@ -87,7 +103,7 @@ loginForm.addEventListener('submit', async (e) => {
     }
 });
 
-// 4. CARREGAR DADOS DO SERVIDOR (CONSULTA)
+// 5. CARREGAR DADOS DO SERVIDOR
 async function carregarCadastros() {
     try {
         const resposta = await fetch(`${API_BASE_URL}/consulta`, {
@@ -97,54 +113,54 @@ async function carregarCadastros() {
             const dados = await resposta.json();
             cadastros = dados.usuarios;
             renderizarTabela();
-        } else if (resposta.status === 401) {
-            btnLogout.click(); // Token expirado
         }
     } catch (erro) {
         console.error("Erro ao carregar:", erro);
     }
 }
 
-// 5. RENDERIZAR TABELA COM ID E STATUS
+// 6. RENDERIZAR TABELA (COM ID E STATUS)
 function renderizarTabela() {
     tabelaCadastros.innerHTML = ''; 
     totalCadastrosEl.textContent = cadastros.length;
 
     cadastros.forEach(cadastro => {
         const tr = document.createElement('tr');
-        
-        // No Firebase/Flask o ID vem como 'id'. Se não existir, mostra '---'
-        const idExibido = cadastro.id
+        const idExibido = cadastro.id || '---';
         const status = cadastro.status || 'Pendente';
         const statusClass = `status-${status.toLowerCase()}`;
 
         tr.innerHTML = `
-            
+           
             <td style="padding: 12px; color: #fff;">${cadastro.nome}</td>
             <td style="padding: 12px; color: #4f8b4f;">${cadastro.cpf}</td>
             <td style="padding: 12px;">
                 <span class="status-badge ${statusClass}">${status}</span>
             </td>
             <td style="padding: 12px; text-align: right;">
-                <button onclick="editarCadastro('${cadastro.cpf}')" style="color: #4f8b4f; background: none; border: none; cursor: pointer; margin-right: 15px; font-weight: bold;">EDITAR</button>
-                <button onclick="deletarCadastro('${cadastro.cpf}')" style="color: #ff4444; background: none; border: none; cursor: pointer; font-weight: bold;">EXCLUIR</button>
+                <button onclick="editarCadastro('${cadastro.cpf}')" class="btn-edit-table">EDITAR</button>
+                <button onclick="deletarCadastro('${cadastro.cpf}')" class="btn-delete-table">EXCLUIR</button>
             </td>
         `;
         tabelaCadastros.appendChild(tr);
     });
 }
 
-// 6. SALVAR OU EDITAR CADASTRO
+// 7. SALVAR OU EDITAR (COM VALIDAÇÃO DE CPF)
 cadastroForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const idEdicao = document.getElementById('cadastroId').value;
-    const nome = document.getElementById('nome').value;
-    const cpf = document.getElementById('cpf').value;
-    const status = document.getElementById('status').value; // Valor do Select
+    const nome = inputNome.value;
+    const cpf = inputCpf.value;
+    const status = inputStatus.value;
+
+    // Bloqueia CPF com números repetidos (ex: 00000000000)
+    if (/^(\d)\1{10}$/.test(cpf)) {
+        alert("CPF Inválido: Não pode conter todos os números iguais.");
+        return;
+    }
 
     const dados = { nome, cpf, status };
-    
-    // Se tiver idEdicao usamos PUT (substituir), senão POST (novo)
     const url = idEdicao ? `${API_BASE_URL}/substituir/${cpf}` : `${API_BASE_URL}/cadastro`;
     const metodo = idEdicao ? 'PUT' : 'POST';
 
@@ -161,46 +177,39 @@ cadastroForm.addEventListener('submit', async (e) => {
         if (resposta.ok) {
             limparFormulario();
             carregarCadastros();
-            alert(idEdicao ? "Atualizado!" : "Cadastrado!");
+            alert(idEdicao ? "Atualizado com sucesso!" : "Cadastrado com sucesso!");
         } else {
             const erro = await resposta.json();
-            alert("Erro: " + (erro.erro || erro.mensagem));
+            alert("Erro: " + (erro.erro || "Falha na operação"));
         }
     } catch (erro) {
         console.error("Erro ao salvar:", erro);
     }
 });
 
-// 7. FUNÇÕES DE APOIO (EDITAR, EXCLUIR, SAIR)
+// 8. FUNÇÕES DE SUPORTE
 window.editarCadastro = function(cpf) {
     const cadastro = cadastros.find(c => String(c.cpf) === String(cpf));
     if (cadastro) {
-        // Guarda o CPF para a rota de busca
         document.getElementById('cadastroId').value = cadastro.cpf;
+        inputCpf.value = cadastro.cpf;
+        inputNome.value = cadastro.nome;
+        inputStatus.value = cadastro.status || 'Pendente';
         
-        // Preenche os campos visíveis
-        document.getElementById('cpf').value = cadastro.cpf;
-        document.getElementById('nome').value = cadastro.nome;
-        
-        // Garante que o status também seja carregado no select ao editar
-        if(document.getElementById('status')) {
-            document.getElementById('status').value = cadastro.status || 'Pendente';
-        }
-
         formTitle.textContent = "Editar Cadastro";
-        
+        btnCancelar.classList.remove('hidden');
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 };
 
 window.deletarCadastro = async function(cpf) {
-    if (!confirm("Excluir este cadastro?")) return;
+    if (!confirm("Tem certeza que deseja excluir?")) return;
     try {
-        const resposta = await fetch(`${API_BASE_URL}/excluir/${cpf}`, {
+        await fetch(`${API_BASE_URL}/excluir/${cpf}`, {
             method: 'DELETE',
-            
+            headers: { 'Authorization': `Bearer ${tokenAtual}` }
         });
-        if (resposta.ok) carregarCadastros();
+        carregarCadastros();
     } catch (erro) {
         console.error("Erro ao deletar:", erro);
     }
@@ -215,7 +224,8 @@ function limparFormulario() {
     cadastroForm.reset();
     document.getElementById('cadastroId').value = ''; 
     formTitle.textContent = "Novo Cadastro";
-    
+    btnCancelar.classList.add('hidden');
+    inputStatus.value = "Pendente";
 }
 
 function mostrarPainelAdmin() {
@@ -229,33 +239,8 @@ function mostrarLogin() {
     adminSection.classList.add('hidden');
     userInfo.classList.add('hidden');
 }
-// Restrição para o campo NOME (impede números e caracteres especiais)
-document.getElementById('nome').addEventListener('input', function (e) {
-    this.value = this.value.replace(/[0-9]/g, ''); // Remove qualquer número
-});
 
-// Restrição para o campo CPF (impede letras e limita a 11 dígitos)
-document.getElementById('cpf').addEventListener('input', function (e) {
-    // Remove tudo o que não for número
-    let value = this.value.replace(/\D/g, ''); 
-    
-    // Limita a 11 caracteres
-    if (value.length > 11) {
-        value = value.slice(0, 11);
-    }
-    
-    this.value = value;
-});
 btnCancelar.addEventListener('click', limparFormulario);
-// Adicione isto ao final do seu admin.js
-const inputNome = document.getElementById('nome');
 
-if (inputNome) {
-    inputNome.addEventListener('input', function() {
-        // Remove qualquer caractere que NÃO seja letra ou espaço
-        this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
-    });
-}
-
-// INICIAR
+// INICIAR APLICAÇÃO
 iniciarApp();

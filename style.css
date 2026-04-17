@@ -198,33 +198,46 @@ button {
   letter-spacing: 1px;
   border: none;
 }
-
 .btn-ok {
-  background: var(--primary-color) !important;
-  color: #000 !important;
+    background: var(--primary-color);
+    color: #000;
+}
+/* Botões de Ação na Tabela (Correção de Alinhamento) */
+.btn-edit-table, .btn-delete-table {
+    background: none !important; /* Remove o fundo branco da imagem */
+    border: none !important;
+    padding: 5px 10px !important;
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 0.75rem;
+    transition: var(--transition);
+    display: inline-block;
+    width: auto !important; /* Impede que fiquem gigantes */
 }
 
-.btn-ok:hover {
-  background: #62ad62 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px var(--primary-glow);
+.btn-edit-table {
+    color: var(--primary-color) !important;
 }
 
-.btn-exit {
-  background: transparent;
-  border: 1px solid #422;
-  color: #ff6666;
+.btn-edit-table:hover {
+    text-shadow: 0 0 8px var(--primary-glow);
+    transform: scale(1.1);
 }
 
-.btn-exit:hover {
-  background: #311;
+.btn-delete-table {
+    color: var(--error) !important;
+    margin-left: 10px;
 }
 
-.btn-cancel {
-  background: #222;
-  color: #888;
-  margin-top: 10px;
-  width: 100%;
+.btn-delete-table:hover {
+    text-shadow: 0 0 8px rgba(255, 68, 68, 0.4);
+    transform: scale(1.1);
+}
+
+/* Garante que a coluna de ações alinhe à direita */
+.admin-table td:last-child {
+    text-align: right;
+    white-space: nowrap;
 }
 
 /* --- TABELAS --- */
@@ -254,13 +267,12 @@ button {
   padding: 15px;
   border-bottom: 2px solid #1a1a1a;
 }
-
 .admin-table td {
   padding: 15px;
-  border-bottom: 1px solid #1a1a1a;
-  font-size: 0.95rem;
+  border-bottom: 1px solid #222;
+  color: var(--primary-color);
+  transition: var(--transition);
 }
-
 .admin-table tr:hover td {
   background: rgba(255, 255, 255, 0.02);
   color: var(--primary-color);
@@ -291,6 +303,7 @@ button {
     font-weight: bold;
     text-transform: uppercase;
 }
+
 
 .status-ativo { background: rgba(79, 139, 79, 0.2); color: #4f8b4f; border: 1px solid #4f8b4f; }
 .status-inativo { background: rgba(255, 68, 68, 0.2); color: #ff4444; border: 1px solid #ff4444; }
