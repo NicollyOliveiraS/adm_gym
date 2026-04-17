@@ -53,5 +53,11 @@ Token: Após o login, o token de acesso é enviado no header Authorization (Bear
 
 Validação de Input: Scripts impedem a inserção de caracteres especiais em campos numéricos e validam o formato básico do CPF antes do envio ao servidor.
 
+Autora:
+Nicolly Oliveira - Desenvolvedora Front-end
+Email: Nicolly.oliveira.senai@gmail.com
+
+Link da vercel do projeto: https://adm-greenfit.vercel.app/
+
 📝 Licença
 Este projeto foi desenvolvido para uso interno da academia GreenFit.
